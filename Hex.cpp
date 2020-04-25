@@ -1,5 +1,6 @@
 #include <cassert>
 #include <string>
+#include <vector>
 
 // https://stackoverflow.com/questions/2023977/difference-of-keywords-typename-and-class-in-templates
 // https://www.geeksforgeeks.org/templates-cpp/
@@ -61,11 +62,12 @@ Hex hex_multiply(Hex a, int k){
     return Hex(a.q * k, a.r * k, a.s * k);
 }
 
-// Calculating distance btwn. two hexes
-// This implementation is based on the conversion btwn. cube and hex grids
-// Another implementation relies on finding the max of the three differential components
-// But this implementation is slightly more efficient, since dividing by 2 is just a bitshift operation
-// Graphic explanation in reference_material folder
+/* Calculating distance btwn. two hexes
+   This implementation is based on the conversion btwn. cube and hex grids
+   Another implementation relies on finding the max of the three differential components
+   But this implementation is slightly more efficient, since dividing by 2 is just a bitshift operation
+   Graphic explanation in reference_material folder
+*/
 int hex_length(Hex hex){
     return int((abs(hex.q) + abs(hex.r) + abs(hex.s)) / 2);
 }
@@ -74,5 +76,21 @@ int hex_distance(Hex a, Hex b){
     return hex_length(hex_subtract(a, b));
 }
 
+
+// https://www.redblobgames.com/grids/hexagons/#neighbors
+const std::vector<Hex> hex_directions = {
+    Hex(1, 0, -1), Hex(1, -1, 0), Hex(0, -1, 1),
+    Hex(-1, 0, 1), Hex(-1, 1, 0), Hex(0, 1, -1)
+};
+
 // https://stackoverflow.com/questions/1571340/what-is-the-assert-function
-// Finding neighbors
+// Return a unit hex (directional hex) with range [0,5] based on direction from origin
+Hex hex_direction(int direction){
+    assert(0 <= direction && direction < 6);
+    return hex_directions[direction];
+}
+
+// Find neighboring hexes (generate coords for neighboring hexes)
+Hex hex_neighbor(Hex hex, int direction){
+    return hex_add(hex, hex_direction(direction));
+}
