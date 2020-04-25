@@ -55,8 +55,24 @@ Hex hex_add(Hex a, Hex b){
 
 Hex hex_subtract(Hex a, Hex b){
     return Hex(a.q + b.q, a.r + b.r, a.s + b.s);
-}
+}  
 
 Hex hex_multiply(Hex a, int k){
     return Hex(a.q * k, a.r * k, a.s * k);
 }
+
+// Calculating distance btwn. two hexes
+// This implementation is based on the conversion btwn. cube and hex grids
+// Another implementation relies on finding the max of the three differential components
+// But this implementation is slightly more efficient, since dividing by 2 is just a bitshift operation
+// Graphic explanation in reference_material folder
+int hex_length(Hex hex){
+    return int((abs(hex.q) + abs(hex.r) + abs(hex.s)) / 2);
+}
+
+int hex_distance(Hex a, Hex b){
+    return hex_length(hex_subtract(a, b));
+}
+
+// https://stackoverflow.com/questions/1571340/what-is-the-assert-function
+// Finding neighbors
