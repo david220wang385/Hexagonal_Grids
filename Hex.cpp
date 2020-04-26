@@ -78,19 +78,35 @@ int hex_distance(Hex a, Hex b){
 
 
 // https://www.redblobgames.com/grids/hexagons/#neighbors
-const std::vector<Hex> hex_directions = {
+const std::vector<Hex> hex_adjacents = {
     Hex(1, 0, -1), Hex(1, -1, 0), Hex(0, -1, 1),
     Hex(-1, 0, 1), Hex(-1, 1, 0), Hex(0, 1, -1)
 };
 
 // https://stackoverflow.com/questions/1571340/what-is-the-assert-function
 // Return a unit hex (directional hex) with range [0,5] based on direction from origin
-Hex hex_direction(int direction){
+Hex hex_adj_direction(int direction){
+    assert(0 <= direction && direction < 6);
+    return hex_adjacents[direction];
+}
+
+// Find neighboring hexes (generate coords for neighboring hexes)
+Hex hex_adjacent_neighbor(Hex hex, int direction){
+    return hex_add(hex, hex_adj_direction(direction));
+}
+
+// Change one axis by +/-2 and the other two axes by -/+1 (total change must be zero)
+const std::vector<Hex> cube_diagonals = {
+    Hex(+2, -1, -1), Hex(+1, +1, -2), Hex(-1, +2, -1), 
+    Hex(-2, +1, +1), Hex(-1, -1, +2), Hex(+1, -2, +1), 
+};
+
+Hex hex_diag_direction(int direction){
     assert(0 <= direction && direction < 6);
     return hex_directions[direction];
 }
 
-// Find neighboring hexes (generate coords for neighboring hexes)
-Hex hex_neighbor(Hex hex, int direction){
-    return hex_add(hex, hex_direction(direction));
+// Find diagonally neighboring hexes (generate coords for diag. neighboring hexes)
+Hex hex_diagonal_neighbor(Hex hex, int direction){
+    return hex_add(hex, hex_diag_direction(direction));
 }
