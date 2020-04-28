@@ -96,14 +96,14 @@ Hex hex_adjacent_neighbor(Hex hex, int direction){
 }
 
 // Change one axis by +/-2 and the other two axes by -/+1 (total change must be zero)
-const std::vector<Hex> cube_diagonals = {
+const std::vector<Hex> hex_diagonals = {
     Hex(+2, -1, -1), Hex(+1, +1, -2), Hex(-1, +2, -1), 
     Hex(-2, +1, +1), Hex(-1, -1, +2), Hex(+1, -2, +1), 
 };
 
 Hex hex_diag_direction(int direction){
     assert(0 <= direction && direction < 6);
-    return hex_directions[direction];
+    return hex_diagonals[direction];
 }
 
 // Find diagonally neighboring hexes (generate coords for diag. neighboring hexes)
