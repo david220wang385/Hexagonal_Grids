@@ -13,14 +13,15 @@ struct _Hex {
     // https://docs.microsoft.com/en-us/cpp/cpp/unions?view=vs-2019
     union {
         const Number v[3];
-        struct {const int q, r, s; };
+        struct {const Number q, r, s; };
     };
     
     // Support both 2 and 3 argument constructors
-    _Hex(int q_, int r_, int s_) : v{q_, r_, s_} {
-        assert(q_ + r_ + s_  == 0);
+    // Need to template constructor to support double values for fractional hexes
+    _Hex(Number q_, Number r_, Number s_) : v{q_, r_, s_} {
+        assert(q_ + r_ + s_  <= 0.0000001); // bounds check in case of double
     }
-    _Hex(int q_, int r_) : v{q_, r_, - q_ - r_} {}
+    _Hex(Number q_, Number r_) : v{q_, r_, - q_ - r_} {}
 
     // Accessors
     // Inline just copy-pastes function body to function calls

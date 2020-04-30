@@ -1,4 +1,5 @@
 #include <cmath>
+#include "Hex.cpp"
 
 // Need a way to convert between hex and screen coordinates
 // Two types of layouts based on how hexagons are laid on the screen
@@ -72,5 +73,6 @@ FractionalHex pixel_to_hex(Layout layout, Point p){
                      (p.y - layout.origin.y) / layout.size.y);
     double q = M.b0 * pt.x + M.b1 * pt.y;
     double r = M.b2 * pt.x + M.b3 * pt.y;
+
     return FractionalHex(q, r, -q - r);
 }
