@@ -42,7 +42,7 @@ struct Point {
 struct Layout {
     
     const Orientation orientation;
-    const Point size;
+    const Point size; // length from center of hexagon to vertex
     const Point origin;
     
     Layout(Orientation orientation_, Point size_, Point origin_)
@@ -50,3 +50,27 @@ struct Layout {
 
 };
 
+// Find pixel coordinates of hex coord's center
+Point hex_to_pixel(Layout layout, Hex h) {
+
+    // Matrix multiplication of forward matrix and hex coords
+    // layout.size.x and y are not width and height of hexes
+    const Orientation& M = layout.orientation;
+    double x = (M.f0 * h.q + M.f1 * h.r) * layout.size.x;
+    double y = (M.f2 * h.q + M.f3 * h.r) * layout.size.y;
+
+    // Translate from origin
+    return Point(layout.origin.x + x, layout.origin.y + y);
+}
+
+// Map cursor location on the screen to a specifc hex on the grid
+FractionalHex pixel_to_hex(Layout layout, Point p){
+    
+    // Getting absolute value from 0,0 and then dividing by size to get
+    const Orientation& M = layout.orientation;
+    Point pt = Point((p.x - layout.origin.x) / layout.size.x,
+                     (p.y - layout.origin.y) / layout.size.y);
+    double q = M.b0 * pt.x + M.b1 * pt.y;
+    double r = M.b2 * pt.x + M.b3 * pt.y;
+    return FractionalHex(q, r, -q - r);
+}
