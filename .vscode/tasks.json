@@ -11,7 +11,12 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-IC:/Users/David Wang/vs_code_repos/libs/SFML-2.5.1/include/SFML",
+                "-LC:/Users/David Wang/vs_code_repos/libs/SFML-2.5.1/lib",
+                "-lsfml-graphics",
+                "-lsfml-window",
+                "-lsfml-system"
             ],
             "options": {
                 "cwd": "/usr/bin"

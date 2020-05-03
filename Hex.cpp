@@ -1,6 +1,7 @@
 #include <cassert>
 #include <string>
 #include <vector>
+#include <cmath>
 
 // https://stackoverflow.com/questions/2023977/difference-of-keywords-typename-and-class-in-templates
 // https://www.geeksforgeeks.org/templates-cpp/
@@ -110,4 +111,23 @@ Hex hex_diag_direction(int direction){
 // Find diagonally neighboring hexes (generate coords for diag. neighboring hexes)
 Hex hex_diagonal_neighbor(Hex hex, int direction){
     return hex_add(hex, hex_diag_direction(direction));
+}
+
+// Round a FractionalHex to the nearest integer Hex
+// https://www.redblobgames.com/grids/hexagons/#map-storage
+Hex hex_round(FractionalHex h){
+
+    // Basic rounding
+    int q = int(round(h.q));
+    int r = int(round(h.r));
+    int s = int(round(h.s));
+
+    double q_diff = abs(q - h.q);
+    double r_diff = abs(r - h.r);
+    double s_diff = abs(s - h.s);
+
+    // Minimize deviation 
+
+
+    return Hex(q, r, s);
 }

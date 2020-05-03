@@ -1,4 +1,3 @@
-#include <cmath>
 #include "Hex.cpp"
 
 // Need a way to convert between hex and screen coordinates
@@ -31,27 +30,26 @@ const Orientation layout_flat =
                 0.0);
 
 // Simple class to store the representation of a point
+// Synonymous with pixel coordinates on a screen
 struct Point {
 
     const double x, y;
     
     Point(double x_, double y_) : x(x_), y(y_) {}
-
 };
 
 // Will be used later to create the grid
 struct Layout {
     
     const Orientation orientation;
-    const Point size; // length from center of hexagon to vertex
+    const Point size; // length from center of hexagon to vertex, size.x = size.y for regular hexagon
     const Point origin;
     
     Layout(Orientation orientation_, Point size_, Point origin_)
     :   orientation(orientation_), size(size_), origin(origin_) {}
-
 };
 
-// Find pixel coordinates of hex coord's center
+// Translates hex coordinates (q, r, s) into pixel coordinates onto a screen
 Point hex_to_pixel(Layout layout, Hex h) {
 
     // Matrix multiplication of forward matrix and hex coords
@@ -67,12 +65,42 @@ Point hex_to_pixel(Layout layout, Hex h) {
 // Map cursor location on the screen to a specifc hex on the grid
 FractionalHex pixel_to_hex(Layout layout, Point p){
     
-    // Getting absolute value from 0,0 and then dividing by size to get
+    // Reversing hex_to_pixel algorithm
     const Orientation& M = layout.orientation;
     Point pt = Point((p.x - layout.origin.x) / layout.size.x,
                      (p.y - layout.origin.y) / layout.size.y);
     double q = M.b0 * pt.x + M.b1 * pt.y;
     double r = M.b2 * pt.x + M.b3 * pt.y;
 
+    // Returns a fractional hex that will need to be rounded to a normal int-coordinate hex
     return FractionalHex(q, r, -q - r);
 }
+
+// Hex corners relative to the origin appear in 60 degree increments, w/ starting angle based on Orientation
+// Exact pixel coordinates of the corners can be calculated by adding the coordinates of the center of the hex
+
+// Returns how far the offset of a corner is from any given Hex coordinate
+Point hex_corner_offset(Layout layout, int corner){
+
+    Point size = layout.size;
+    double angle = M_PI * (layout.orientation.start_angle + corner) / 3.0;
+    return Point(size.x * cos(angle), size.y * sin(angle));
+}
+
+// Using the above corner offset method we can calculate a unique array of coordinates of the corners of any given Hex
+std::vector<Point> hex_corners_coords(Layout layout, Hex h){
+
+    std::vector<Point> corners;
+    corners.reserve(6); // Every hex has 6 unique corners
+    Point center_of_hex = hex_to_pixel(layout, h); // Calculate pixel coords of the center of the given Hex
+
+    for(int i = 0; i < 6; i++){
+        Point offset_from_center = hex_corner_offset(layout, i);
+        corners.push_back(Point(center_of_hex.x + offset_from_center.x, 
+                                center_of_hex.y + offset_from_center.y));
+    }
+
+    return corners;
+}
+
+
