@@ -158,14 +158,20 @@ FractionalHex hex_lerp (Hex a, Hex b, double t){
 std::vector<Hex> hex_line(Hex a, Hex b){
 
     int N = hex_distance(a, b); // Number of hexes to include in the line (not counting beginning hex)
+
+    // Needed in case hex_lerp returns a Hex on the edge
+    // Nudges all components of each in the same direction
+    FractionalHex a_nudge(a.q + 1E-6, a.r + 1E-6, a.s - 2E-6);
+    FractionalHex b_nudge(b.q + 1E-6, b.r + 1E-6, b.s - 2E-6);
+
     std::vector<Hex> results;
     results.reserve(N+1);
 
-    double step = 1.0 / max(N, 1); // max function needed for lines w/ length 0
+    double step = 1.0 / max(N, 1); // max function needed for lines w/ length 0, (a == b)
 
     // Start at 0 and end at N b/c the line includes both input hexes
     for(int i = 0; i <= N; i++){
-        results.push_back(hex_round(hex_lerp(a, b, step * i));
+        results.push_back(hex_round(hex_lerp(a_nudge, b_nudge, step * i));
     }
 
     return results; // return a list of hexes included in the line
