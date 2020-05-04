@@ -102,5 +102,3 @@ std::vector<Point> hex_corners_coords(Layout layout, Hex h){
 
     return corners;
 }
-
-

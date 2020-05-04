@@ -126,8 +126,47 @@ Hex hex_round(FractionalHex h){
     double r_diff = abs(r - h.r);
     double s_diff = abs(s - h.s);
 
-    // Minimize deviation 
-
+    // Minimize deviation in order to uphold (q + r + s = 0)
+    if (q_diff > r_diff and q_diff > s_diff) {
+        q = -r - s;
+    } else if (r_diff > s_diff) {
+        r = -q - s;
+    } else {
+        s = -q - r;
+    }
 
     return Hex(q, r, s);
+}
+
+// Drawing a line on hex grid using linear interpolation
+// https://www.redblobgames.com/grids/line-drawing.html
+// https://www.youtube.com/watch?v=8uLVnM36XUc
+
+// Simply 1-D lerp function
+float lerp(double a, double b, double t){
+    return a * (1-t) + b * t;
+}
+
+// Applying above lerp function to each of the components
+FractionalHex hex_lerp (Hex a, Hex b, double t){
+    return FractionalHex(lerp(a.q, b.q, t),
+                         lerp(a.r, b.r, t),
+                         lerp(a.s, b.s, t));
+}
+
+// Drawing the line
+std::vector<Hex> hex_line(Hex a, Hex b){
+
+    int N = hex_distance(a, b); // Number of hexes to include in the line (not counting beginning hex)
+    std::vector<Hex> results;
+    results.reserve(N+1);
+
+    double step = 1.0 / max(N, 1); // max function needed for lines w/ length 0
+
+    // Start at 0 and end at N b/c the line includes both input hexes
+    for(int i = 0; i <= N; i++){
+        results.push_back(hex_round(hex_lerp(a, b, step * i));
+    }
+
+    return results; // return a list of hexes included in the line
 }
