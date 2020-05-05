@@ -1,7 +1,7 @@
 #include <cassert>
-#include <string>
 #include <vector>
 #include <cmath>
+#include <iostream>
 
 // https://stackoverflow.com/questions/2023977/difference-of-keywords-typename-and-class-in-templates
 // https://www.geeksforgeeks.org/templates-cpp/
@@ -148,7 +148,7 @@ float lerp(double a, double b, double t){
 }
 
 // Applying above lerp function to each of the components
-FractionalHex hex_lerp (Hex a, Hex b, double t){
+FractionalHex hex_lerp (FractionalHex a, FractionalHex b, double t){
     return FractionalHex(lerp(a.q, b.q, t),
                          lerp(a.r, b.r, t),
                          lerp(a.s, b.s, t));
@@ -167,11 +167,11 @@ std::vector<Hex> hex_line(Hex a, Hex b){
     std::vector<Hex> results;
     results.reserve(N+1);
 
-    double step = 1.0 / max(N, 1); // max function needed for lines w/ length 0, (a == b)
+    double step = 1.0 / std::max(N, 1); // max function needed for lines w/ length 0, (a == b)
 
     // Start at 0 and end at N b/c the line includes both input hexes
     for(int i = 0; i <= N; i++){
-        results.push_back(hex_round(hex_lerp(a_nudge, b_nudge, step * i));
+        results.push_back(hex_round(hex_lerp(a_nudge, b_nudge, step * i)));
     }
 
     return results; // return a list of hexes included in the line
