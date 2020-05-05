@@ -6,10 +6,22 @@ int main()
     const int WINDOW_WIDTH = 800;
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Hex Test");
 
+    // Colors
+    sf::Color hex_background(244, 244, 241);
+    sf::Color hex_outline(179, 179, 179);
+
+    // Hex Sizes
+    const double HEX_SIZE = 50.f;
+    const double HEX_OUTLINE = HEX_SIZE/25.f;
+
     // Drawing entities
-    sf::CircleShape shape(100.f, 6);
-    shape.setFillColor(sf::Color::Black);
-    shape.move(0, 10);
+    // https://en.sfml-dev.org/forums/index.php?topic=19206.0
+    sf::CircleShape shape(HEX_SIZE, 6);
+    shape.setOrigin(shape.getRadius(), shape.getRadius());
+    shape.setFillColor(hex_background);
+    shape.setOutlineColor(hex_outline);
+    shape.setOutlineThickness(HEX_OUTLINE);
+    shape.move(400, 400);
     shape.rotate(30);
 
     while (window.isOpen())
