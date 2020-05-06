@@ -1,4 +1,6 @@
-#include "Hex.cpp"
+#pragma once
+
+#include "../Header_Files/Hex.h"
 
 // Need a way to convert between hex and screen coordinates
 // Two types of layouts based on how hexagons are laid on the screen

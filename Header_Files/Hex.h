@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cassert>
 #include <vector>
 #include <cmath>
@@ -176,3 +178,8 @@ std::vector<Hex> hex_line(Hex a, Hex b){
 
     return results; // return a list of hexes included in the line
 }
+
+// Return a list of Hexes within N distance of the given hex
+// std::vector<Hex> range(Hex h, int range){
+//     return std::vector<Hex>;
+// }

@@ -1,4 +1,6 @@
-#include "Hex.cpp"
+#pragma once
+
+#include "../Header_Files/Hex.h"
 #include <unordered_map>
 #include <iostream>
 // Experimenting with methods of storing hex maps
@@ -30,11 +32,4 @@ namespace std {
             return hq ^ (hr + 0x9e3779b9 + (hq << 6) + (hq >> 2));
         }
     };
-}
-
-int main(){
-    std::unordered_map<Hex, float> heights; // Hashmap of Hex objects
-    heights[Hex(1, 2, -3)] = 4.3; // calls std::hash
-    std::cout << heights[Hex(1, 2, -3)];
-    return 0;
 }
