@@ -1,12 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include "../Header_Files/Hex.h"
+#include "../Header_Files/LabelHex.h"
 
-int main()
-{
-    std::vector<Hex> range = hex_range(Hex(0,0,0), 2);
-    for(auto it = range.begin(); it != range.end(); it++){
-        std::cout << it->q << " " << it->r << " " << it->s << std::endl;
-    }
+int main(){
+
     const int WINDOW_HEIGHT = 800;
     const int WINDOW_WIDTH = 800;
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Hex Test");
@@ -29,8 +26,22 @@ int main()
     shape.move(400, 400);
     shape.rotate(30);
 
-    while (window.isOpen())
-    {
+    sf::Text label;
+    sf::Font font;
+
+    // Directory to load from is ./hex_grid_implementation
+    if (!font.loadFromFile("./Resources/arial.ttf")){}
+
+    LabelHex label_hex("hello there", HEX_SIZE, font);
+
+    label.setFont(font);
+    label.setString("label_text");
+    label.setCharacterSize(24);
+    label.setFillColor(sf::Color::Blue);
+    label.setOrigin(10, 10);
+    label.move(400,400);
+
+    while (window.isOpen()){
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -40,7 +51,9 @@ int main()
 
         // https://en.sfml-dev.org/forums/index.php?topic=8489.0
         window.clear(sf::Color::White);
-        window.draw(shape);
+        window.draw(label_hex);
+        // window.draw(shape);
+        // window.draw(label);
         window.display();
     }
 
