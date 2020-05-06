@@ -180,6 +180,22 @@ std::vector<Hex> hex_line(Hex a, Hex b){
 }
 
 // Return a list of Hexes within N distance of the given hex
-// std::vector<Hex> range(Hex h, int range){
-//     return std::vector<Hex>;
-// }
+std::vector<Hex> hex_range(Hex h, int range){
+
+    std::vector<Hex> in_range;
+    int N = range;
+    
+    // Haven't found a better algorithm for this
+    // Each x,y pair has a unique z to satisfy (z = -x-y)
+    // https://www.redblobgames.com/grids/hexagons/#range
+    for(int x = -N; x <= N; x++){
+        for(int y = std::max(-N-x, -N); y <= std::min(N-x, N); y++){
+            
+            int z = -x-y;
+
+            // http://candcplusplus.com/c-difference-between-emplace_back-and-push_back-function
+            in_range.emplace_back(x, y, z);
+        }
+    }
+    return in_range;
+}

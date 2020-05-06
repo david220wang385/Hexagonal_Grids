@@ -1,7 +1,12 @@
 #include <SFML/Graphics.hpp>
+#include "../Header_Files/Hex.h"
 
 int main()
 {
+    std::vector<Hex> range = hex_range(Hex(0,0,0), 2);
+    for(auto it = range.begin(); it != range.end(); it++){
+        std::cout << it->q << " " << it->r << " " << it->s << std::endl;
+    }
     const int WINDOW_HEIGHT = 800;
     const int WINDOW_WIDTH = 800;
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Hex Test");
