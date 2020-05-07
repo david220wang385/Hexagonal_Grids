@@ -21,12 +21,12 @@ struct Orientation{
 };
 
 // Implementation of the two layouts (pointy and flat top)
-const Orientation layout_pointy =
+const Orientation orientation_pointy =
     Orientation(std::sqrt(3.0), std::sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0,
                 std::sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0,
                 0.5);
 
-const Orientation layout_flat =
+const Orientation orientation_flat =
     Orientation(3.0 / 2.0, 0.0, std::sqrt(3.0) / 2.0, std::sqrt(3.0),
                 2.0 / 3.0, 0.0, -1.0 / 3.0, std::sqrt(3.0) / 3.0,
                 0.0);

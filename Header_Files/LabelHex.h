@@ -4,49 +4,56 @@
 #include <string>
 #include <iostream>
 
-// https://www.geeksforgeeks.org/inheritance-in-c/
-struct LabelHex : public sf::Drawable{
-//struct LabelHex{
+// Hex Colors
+const sf::Color hex_background(244, 244, 241);
+const sf::Color hex_outline(179, 179, 179);
 
-    // Remove this later
-    sf::Color hex_background = sf::Color(0, 150, 16);
-    sf::Color hex_outline = sf::Color(179, 179, 179);;
+// https://www.geeksforgeeks.org/inheritance-in-c/
+struct LabelHex : public sf::Drawable, sf::Transformable{
 
     // Internal Text member to store the label information
     sf::Text label;
-    sf::CircleShape hex;
+    sf::CircleShape hexShape;
+    Hex hex;
 
     // Constructor
-    LabelHex(std::string label_text, int radius, sf::Font& font){
-
+    // https://stackoverflow.com/questions/59459450/sfml-2-4-2-segmentation-fault-when-drawing-text
+    // This answer took me over 2 hours to find
+    LabelHex(std::string label_text, int radius, sf::Font& font, Hex hex_) : hex(hex_){
+        
+        // Text label styling
+        label.setFont(font); // Font 
         label.setString(label_text);
-        label.setCharacterSize(24);
+        label.setCharacterSize(20);
         label.setFillColor(sf::Color::Blue);
-        label.setOrigin(radius, radius);
-        label.move(400,400);
 
-        setupHexDisplay(radius);
-        textSetFont(font);
+        // https://stackoverflow.com/questions/14505571/centering-text-on-the-screen-with-sfml
+        sf::FloatRect textRect = label.getLocalBounds();
+        label.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+
+        // Hexagon styling
+        hexShape.setRadius(radius);
+        hexShape.setPointCount(6); // Cause hexagon
+        hexShape.setOrigin(radius, radius);
+        hexShape.setFillColor(hex_background);
+        hexShape.setOutlineColor(hex_outline);
+        hexShape.setOutlineThickness(radius/50.f);
+        hexShape.rotate(30);
     }
 
-    // Make the actual shape appear as a hexagon
-    void setupHexDisplay(int radius){
-        hex.setRadius(radius);
-        hex.setPointCount(6); // Cause hexagon
-        hex.setOrigin(hex.getRadius(), hex.getRadius());
-        hex.setFillColor(hex_background);
-        hex.setOutlineColor(hex_outline);
-        hex.setOutlineThickness(hex.getRadius()/25.f);
-        hex.move(400,400);
-        hex.rotate(30);
-    }
-
+    // Overwritten draw function to draw both the hex and label
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
-        target.draw(hex);
+        target.draw(hexShape);
         target.draw(label);
     }
 
-    void textSetFont(sf::Font& font){
-        label.setFont(font);
+    void setPosition(float x, float y){
+        hexShape.setPosition(x, y);
+        label.setPosition(x, y);
+    }
+
+    void scale(float x, float y){
+        hexShape.scale(x, y);
+        label.scale(x, y);
     }
 };
